@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Inventario Completo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Barra Lateral -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-store-alt"></i> Aceites y Lubricantes Gomez
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="active" data-section="dashboard">
+                    <i class="fas fa-chart-line"></i> Panel Principal
+                </a>
+                <a href="#inventario" data-section="inventario">
+                    <i class="fas fa-cubes"></i> Inventario Actual
+                </a>
+                <a href="#productos" data-section="productos">
+                    <i class="fas fa-box-open"></i> Registrar Producto
+                </a>
+                <a href="#categorias" data-section="categorias">
+                    <i class="fas fa-tags"></i> Categorías
+                </a>
+                <a href="#compras" data-section="compras">
+                    <i class="fas fa-truck-loading"></i> Compras
+                </a>
+                <a href="#ventas" data-section="ventas">
+                    <i class="fas fa-cash-register"></i> Ventas
+                </a>
+                <a href="#materiales" data-section="materiales">
+                    <i class="fas fa-recycle"></i> Materiales Reciclables
+                </a>
+                <a href="#compras-materiales" data-section="compras-materiales">
+                    <i class="fas fa-truck-loading"></i> Comprar Material
+                </a>
+                <a href="#ventas-materiales" data-section="ventas-materiales">
+                    <i class="fas fa-hand-holding-usd"></i> Vender Material
+                </a>
+                <a href="#inventario-materiales" data-section="inventario-materiales">
+                    <i class="fas fa-box"></i> Inventario Materiales
+                </a>
+                <a href="#resumenes" data-section="resumenes">
+                    <i class="fas fa-list-alt"></i> Resúmenes
+                </a>
+                <a href="#configuracion" data-section="configuracion">
+                    <i class="fas fa-cog"></i> Configuración
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            
+            <!-- Sección 0: Dashboard -->
+            <section id="dashboard" class="content-section active">
+                <h2><i class="fas fa-chart-line"></i> Dashboard - Resumen Financiero</h2>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <button id="cargarDatosGraficosBtn" class="btn primary-btn">
+                        <i class="fas fa-sync"></i> Actualizar Dashboard
+                    </button>
+                    <button id="calcularResumenBtn" class="btn secondary-btn">
+                        <i class="fas fa-calculator"></i> Calcular Resumen
+                    </button>
+                </div>
+                
+                <div id="statusDashboard" class="status-message"></div>
+
+                <!-- Estadísticas de Productos -->
+                <h3 style="color: var(--text-primary); margin: 1.5rem 0 1rem;">
+                    <i class="fas fa-box"></i> Productos
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-card ventas">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                        <div class="stat-value" id="totalVentas">$0.00</div>
+                        <div class="stat-label">Total Ventas</div>
+                    </div>
+                    <div class="stat-card compras">
+                        <i class="fas fa-truck-loading fa-2x"></i>
+                        <div class="stat-value" id="totalCompras">$0.00</div>
+                        <div class="stat-label">Total Compras</div>
+                    </div>
+                    <div class="stat-card ganancias">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                        <div class="stat-value" id="totalGanancias">$0.00</div>
+                        <div class="stat-label">Ganancias Netas</div>
+                    </div>
+                    <div class="stat-card gastos">
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                        <div class="stat-value" id="totalGastos">$0.00</div>
+                        <div class="stat-label">Total Gastos</div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas de Materiales Reciclables -->
+                <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">
+                    <i class="fas fa-recycle"></i> Materiales Reciclables
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                        <div class="stat-value" id="totalInvertidoMateriales">$0.00</div>
+                        <div class="stat-label">Total Invertido</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                        <div class="stat-value" id="totalVendidoMateriales">$0.00</div>
+                        <div class="stat-label">Total Vendido</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                        <div class="stat-value" id="gananciaMateriales">$0.00</div>
+                        <div class="stat-label">Ganancia Materiales</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-box fa-2x"></i>
+                        <div class="stat-value" id="valorInventarioMateriales">$0.00</div>
+                        <div class="stat-label">Valor Inventario</div>
+                    </div>
+                    <div class="stat-card" style="grid-column: span 2;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                        <div class="stat-value" id="materialMasComprado" style="font-size: 1.5rem;">N/A</div>
+                        <div class="stat-label">Material Más Comprado</div>
+                    </div>
+                </div>
+
+                <!-- Gráficas -->
+                <div class="chart-container">
+                    <canvas id="resumenFinancieroChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="materialesChart"></canvas>
+                </div>
+            </section>
+            
+            <!-- Sección 1: Inventario Actual -->
+            <section id="inventario" class="content-section">
+                <h2><i class="fas fa-cubes"></i> Inventario Actual</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Lista de todos los productos y su stock disponible.</p>
+                <button id="cargarInventarioBtn" class="btn secondary-btn">
+                    <i class="fas fa-boxes"></i> Refrescar Inventario
+                </button>
+                <div id="statusInventario" class="status-message"></div>
+                <div style="max-height: 600px; overflow-y: auto; margin-top: 1.5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Código</th>
+                                <th>Categoría</th>
+                                <th>Stock</th>
+                                <th>P. Venta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventarioTableBody">
+                            <tr><td colspan="6" style="text-align: center; padding: 3rem;">Presiona "Refrescar Inventario" para cargar los datos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección 2: Registrar Producto -->
+            <section id="productos" class="content-section">
+                <h2><i class="fas fa-box-open"></i> Registrar Nuevo Producto</h2>
+                <p class="status-message info" style="display:block;">
+                    <i class="fas fa-info-circle"></i> El ID del producto se generará automáticamente.
+                </p>
+                <form id="productoForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="p_codigo"><i class="fas fa-barcode"></i> Código Único:</label>
+                        <input type="text" id="p_codigo" required placeholder="Ej: PRD001">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_nombre"><i class="fas fa-tag"></i> Nombre:</label>
+                        <input type="text" id="p_nombre" required placeholder="Nombre del producto">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_categoria"><i class="fas fa-folder"></i> Categoría:</label>
+                        <select id="p_categoria" required>
+                            <option value="" disabled selected>Cargando categorías...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="p_precio_compra"><i class="fas fa-dollar-sign"></i> Precio Compra:</label>
+                        <input type="number" id="p_precio_compra" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_precio_venta"><i class="fas fa-dollar-sign"></i> Precio Venta:</label>
+                        <input type="number" id="p_precio_venta" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="p_stock"><i class="fas fa-cubes"></i> Stock Inicial:</label>
+                        <input type="number" id="p_stock" required min="0" placeholder="0">
+                    </div>
+                    <button type="submit" class="btn primary-btn full-width">
+                        <i class="fas fa-save"></i> Registrar Nuevo Producto
+                    </button>
+                </form>
+                <div id="statusProducto" class="status-message"></div>
+            </section>
+            
+            <!-- Sección 3: Categorías -->
+            <section id="categorias" class="content-section">
+                <h2><i class="fas fa-tags"></i> Gestión de Categorías</h2>
+                <form id="categoriaForm" class="form-grid single-col">
+                    <div class="form-group">
+                        <label for="c_nombre"><i class="fas fa-tag"></i> Nombre de la Categoría:</label>
+                        <input type="text" id="c_nombre" required placeholder="Ej: Aceites, Lubricantes, etc.">
+                    </div>
+                    <button type="submit" class="btn secondary-btn">
+                        <i class="fas fa-plus"></i> Agregar Categoría
+                    </button>
+                </form>
+                <div id="statusCategoria" class="status-message"></div>
+                
+                <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">
+                    <i class="fas fa-list"></i> Categorías Existentes:
+                </h3>
+                <ul id="listaCategorias" style="list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <li style="background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                        Cargando...
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Sección 4: Compras -->
+            <section id="compras" class="content-section">
+                <h2><i class="fas fa-truck-loading"></i> Registro de Compras (Añade Stock)</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra las compras de productos para aumentar el inventario.
+                </p>
+                <form id="compraForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="co_query"><i class="fas fa-search"></i> Buscar Producto (ID, Código o Nombre):</label>
+                        <input type="text" id="co_query" placeholder="Escriba para buscar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="co_cantidad"><i class="fas fa-boxes"></i> Cantidad Comprada:</label>
+                        <input type="number" id="co_cantidad" required min="1" placeholder="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="co_precio_compra"><i class="fas fa-dollar-sign"></i> Precio Unitario de Compra:</label>
+                        <input type="number" id="co_precio_compra" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="co_proveedor"><i class="fas fa-user"></i> Proveedor (Opcional):</label>
+                        <input type="text" id="co_proveedor" placeholder="Nombre del proveedor">
+                    </div>
+                    <div class="product-details hidden full-width" id="co_product_details"></div>
+                    <input type="hidden" id="co_producto_id">
+                    <button type="submit" class="btn primary-btn full-width" id="co_submit_btn" disabled>
+                        <i class="fas fa-cart-plus"></i> Registrar Compra
+                    </button>
+                </form>
+                <div id="statusCompra" class="status-message"></div>
+            </section>
+            
+            <!-- Sección 5: Ventas -->
+            <section id="ventas" class="content-section">
+                <h2><i class="fas fa-cash-register"></i> Registro de Ventas (Resta Stock)</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra las ventas de productos para reducir el inventario.
+                </p>
+                <form id="ventaForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="v_query"><i class="fas fa-search"></i> Buscar Producto (ID, Código o Nombre):</label>
+                        <input type="text" id="v_query" required placeholder="Escriba para buscar">
+                    </div>
+                    <div class="form-group">
+                        <label for="v_cantidad"><i class="fas fa-shopping-cart"></i> Cantidad Vendida:</label>
+                        <input type="number" id="v_cantidad" required min="1" placeholder="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="v_precio_venta"><i class="fas fa-dollar-sign"></i> Precio Unitario de Venta:</label>
+                        <input type="number" id="v_precio_venta" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="v_cliente"><i class="fas fa-user"></i> Cliente (Opcional):</label>
+                        <input type="text" id="v_cliente" placeholder="Nombre del cliente">
+                    </div>
+                    <div class="product-details hidden full-width" id="v_product_details"></div>
+                    <input type="hidden" id="v_producto_id">
+                    <button type="submit" class="btn primary-btn full-width" id="v_submit_btn" disabled>
+                        <i class="fas fa-hand-holding-usd"></i> Registrar Venta
+                    </button>
+                </form>
+                <div id="statusVenta" class="status-message"></div>
+            </section>
+
+            <!-- Sección: Materiales Reciclables -->
+            <section id="materiales" class="content-section">
+                <h2><i class="fas fa-recycle"></i> Registro de Materiales Reciclables</h2>
+                <p class="status-message info" style="display:block;">
+                    <i class="fas fa-info-circle"></i> Registra los tipos de materiales que compras (Cobre, Aluminio, Hierro, etc.)
+                </p>
+                <form id="materialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="mat_nombre"><i class="fas fa-tag"></i> Nombre del Material:</label>
+                        <input type="text" id="mat_nombre" required placeholder="Ej: Cobre Puro">
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_tipo"><i class="fas fa-layer-group"></i> Tipo de Material:</label>
+                        <select id="mat_tipo" required>
+                            <option value="" disabled selected>Selecciona un tipo</option>
+                            <option value="Metal">🔩 Metal</option>
+                            <option value="Plástico">♻️ Plástico (PET, HDPE, etc.)</option>
+                            <option value="Vidrio">🥤 Vidrio</option>
+                            <option value="Papel/Cartón">📄 Papel/Cartón</option>
+                            <option value="Electrónico">🔌 Electrónico</option>
+                            <option value="Otro">📦 Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="mat_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_descripcion"><i class="fas fa-comment"></i> Descripción (Opcional):</label>
+                        <input type="text" id="mat_descripcion" placeholder="Características del material">
+                    </div>
+                    <button type="submit" class="btn primary-btn full-width">
+                        <i class="fas fa-save"></i> Registrar Material
+                    </button>
+                </form>
+                <div id="statusMaterial" class="status-message"></div>
+                
+                <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">
+                    <i class="fas fa-list"></i> Materiales Registrados:
+                </h3>
+                <ul id="listaMateriales" style="list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <li style="background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                        Cargando...
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Sección: Comprar Material Reciclable -->
+            <section id="compras-materiales" class="content-section">
+                <h2><i class="fas fa-truck-loading"></i> Compra de Material Reciclable</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra la compra de material reciclable pesado en gramos
+                </p>
+                <form id="compraMaterialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="cm_query"><i class="fas fa-search"></i> Buscar Material (ID o Nombre):</label>
+                        <input type="text" id="cm_query" placeholder="Busca el material" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_peso_gramos"><i class="fas fa-weight"></i> Peso en Gramos:</label>
+                        <input type="number" id="cm_peso_gramos" required min="1" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="cm_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_proveedor"><i class="fas fa-user"></i> Proveedor (Opcional):</label>
+                        <input type="text" id="cm_proveedor" placeholder="Nombre del proveedor">
+                    </div>
+
+                    <div class="product-details hidden" id="cm_material_details"></div>
+                    <input type="hidden" id="cm_material_id">
+
+                    <!-- Vista previa del cálculo -->
+                    <div class="form-group full-width" id="cm_preview" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: none;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💰 Cálculo de Compra:</h4>
+                        <p><strong>Peso:</strong> <span id="preview_peso">0</span> gramos = <span id="preview_kg">0</span> kg</p>
+                        <p><strong>Precio por KG:</strong> $<span id="preview_precio_kg">0.00</span></p>
+                        <p style="font-size: 1.5rem; color: var(--secondary-color); margin-top: 1rem;">
+                            <strong>TOTAL A PAGAR:</strong> $<span id="preview_total">0.00</span>
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn full-width" id="cm_submit_btn" disabled>
+                        <i class="fas fa-cart-plus"></i> Registrar Compra de Material
+                    </button>
+                </form>
+                <div id="statusCompraMaterial" class="status-message"></div>
+            </section>
+
+            <!-- Sección: Vender Material Reciclable -->
+            <section id="ventas-materiales" class="content-section">
+                <h2><i class="fas fa-hand-holding-usd"></i> Venta de Material Reciclable</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra la venta de material reciclable pesado en gramos
+                </p>
+                <form id="ventaMaterialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="vm_query"><i class="fas fa-search"></i> Buscar Material (ID o Nombre):</label>
+                        <input type="text" id="vm_query" placeholder="Busca el material" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_peso_gramos"><i class="fas fa-weight"></i> Peso en Gramos:</label>
+                        <input type="number" id="vm_peso_gramos" required min="1" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="vm_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_cliente"><i class="fas fa-user"></i> Cliente (Opcional):</label>
+                        <input type="text" id="vm_cliente" placeholder="Nombre del cliente">
+                    </div>
+
+                    <div class="product-details hidden" id="vm_material_details"></div>
+                    <input type="hidden" id="vm_material_id">
+
+                    <!-- Vista previa del cálculo -->
+                    <div class="form-group full-width" id="vm_preview" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: none;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💵 Cálculo de Venta:</h4>
+                        <p><strong>Peso:</strong> <span id="vm_preview_peso">0</span> gramos = <span id="vm_preview_kg">0</span> kg</p>
+                        <p><strong>Precio por KG:</strong> $<span id="vm_preview_precio_kg">0.00</span></p>
+                        <p style="font-size: 1.5rem; color: var(--secondary-color); margin-top: 1rem;">
+                            <strong>TOTAL A COBRAR:</strong> $<span id="vm_preview_total">0.00</span>
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn full-width" id="vm_submit_btn" disabled>
+                        <i class="fas fa-hand-holding-usd"></i> Registrar Venta de Material
+                    </button>
+                </form>
+                <div id="statusVentaMaterial" class="status-message"></div>
+            </section>
+
+            <!-- Sección: Inventario de Materiales -->
+            <section id="inventario-materiales" class="content-section">
+                <h2><i class="fas fa-box"></i> Inventario de Materiales Reciclables</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Stock actual de materiales en kilogramos (Compras - Ventas)</p>
+                <button id="cargarMaterialesBtn" class="btn secondary-btn">
+                    <i class="fas fa-sync"></i> Refrescar Inventario
+                </button>
+                <div id="statusInventarioMateriales" class="status-message"></div>
+                <div style="max-height: 600px; overflow-y: auto; margin-top: 1.5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Material</th>
+                                <th>Tipo</th>
+                                <th>Precio/KG</th>
+                                <th>Stock (KG)</th>
+                                <th>Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materialesTableBody">
+                            <tr><td colspan="6" style="text-align: center; padding: 3rem;">Presiona "Refrescar Inventario" para cargar los datos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección 6: Resúmenes -->
+            <section id="resumenes" class="content-section">
+                <h2><i class="fas fa-list-alt"></i> Resúmenes y Reportes</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <button id="resumenVentasBtn" class="btn secondary-btn">
+                        <i class="fas fa-chart-bar"></i> Ver Resumen de Ventas (Histórico)
+                    </button>
+                    <button id="resumenComprasBtn" class="btn secondary-btn">
+                        <i class="fas fa-chart-bar"></i> Ver Resumen de Compras (Histórico)
+                    </button>
+                </div>
+                
+                <div id="statusResumen" class="status-message"></div>
+                
+                <div style="max-height: 600px; overflow-y: auto; margin-top: 20px;">
+                    <table class="data-table hidden" id="resumenTable">
+                        <thead></thead>
+                        <tbody id="resumenTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección 7: Configuración -->
+            <section id="configuracion" class="content-section">
+                <h2><i class="fas fa-cog"></i> Configuración de Base de Datos</h2>
+                <div class="config-actions">
+                    <p><i class="fas fa-info-circle"></i> Esta acción <strong>creará/verificará</strong> las pestañas necesarias en Google Sheet.</p>
+                    <button id="iniciarDBBtn" class="btn primary-btn">
+                        <i class="fas fa-play-circle"></i> Iniciar Base de Datos
+                    </button>
+                    
+                    <p class="warning-text">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <strong>¡ADVERTENCIA!</strong> Esta acción eliminará <strong>TODOS</strong> los datos.
+                    </p>
+                    <button id="resetDBBtn" class="btn danger-btn">
+                        <i class="fas fa-sync-alt"></i> Resetear Base de Datos
+                    </button>
+                </div>
+                <div id="statusConfig" class="status-message"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
