@@ -251,7 +251,28 @@
                 </form>
                 <div id="statusVenta" class="status-message"></div>
             </section>
-
+            
+             <!-- Sección 6: Resúmenes -->
+            <section id="resumenes" class="content-section">
+                <h2><i class="fas fa-list-alt"></i> Resúmenes y Reportes</h2>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <button id="resumenVentasBtn" class="btn secondary-btn">
+                        <i class="fas fa-chart-bar"></i> Ver Resumen de Ventas (Histórico)
+                    </button>
+                    <button id="resumenComprasBtn" class="btn secondary-btn">
+                        <i class="fas fa-chart-bar"></i> Ver Resumen de Compras (Histórico)
+                    </button>
+                </div>
+                
+                <div id="statusResumen" class="status-message"></div>
+                
+                <div style="max-height: 600px; overflow-y: auto; margin-top: 20px;">
+                    <table class="data-table hidden" id="resumenTable">
+                        <thead></thead>
+                        <tbody id="resumenTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
            
             <!-- Sección 7: Configuración -->
             <section id="configuracion" class="content-section">
