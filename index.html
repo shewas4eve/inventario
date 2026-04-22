@@ -13,7 +13,7 @@
         <!-- Barra Lateral -->
         <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-store-alt"></i> Tecnomania
+                <i class="fas fa-store-alt"></i> Aceites y Lubricantes Gomez
             </div>
             <nav class="sidebar-nav">
                 <a href="#dashboard" class="active" data-section="dashboard">
@@ -33,6 +33,18 @@
                 </a>
                 <a href="#ventas" data-section="ventas">
                     <i class="fas fa-cash-register"></i> Ventas
+                </a>
+                <a href="#materiales" data-section="materiales">
+                    <i class="fas fa-recycle"></i> Materiales Reciclables
+                </a>
+                <a href="#compras-materiales" data-section="compras-materiales">
+                    <i class="fas fa-truck-loading"></i> Comprar Material
+                </a>
+                <a href="#ventas-materiales" data-section="ventas-materiales">
+                    <i class="fas fa-hand-holding-usd"></i> Vender Material
+                </a>
+                <a href="#inventario-materiales" data-section="inventario-materiales">
+                    <i class="fas fa-box"></i> Inventario Materiales
                 </a>
                 <a href="#resumenes" data-section="resumenes">
                     <i class="fas fa-list-alt"></i> Resúmenes
@@ -87,7 +99,39 @@
                         <div class="stat-label">Total Gastos</div>
                     </div>
                 </div>
-                
+
+                <!-- Estadísticas de Materiales Reciclables -->
+                <h3 style="color: var(--text-primary); margin: 2rem 0 1rem;">
+                    <i class="fas fa-recycle"></i> Materiales Reciclables
+                </h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                        <div class="stat-value" id="totalInvertidoMateriales">$0.00</div>
+                        <div class="stat-label">Total Invertido</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                        <div class="stat-value" id="totalVendidoMateriales">$0.00</div>
+                        <div class="stat-label">Total Vendido</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                        <div class="stat-value" id="gananciaMateriales">$0.00</div>
+                        <div class="stat-label">Ganancia Materiales</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-box fa-2x"></i>
+                        <div class="stat-value" id="valorInventarioMateriales">$0.00</div>
+                        <div class="stat-label">Valor Inventario</div>
+                    </div>
+                    <div class="stat-card" style="grid-column: span 2;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                        <div class="stat-value" id="materialMasComprado" style="font-size: 1.5rem;">N/A</div>
+                        <div class="stat-label">Material Más Comprado</div>
+                    </div>
+                </div>
+
                 <!-- Gráficas -->
                 <div class="chart-container">
                     <canvas id="resumenFinancieroChart"></canvas>
@@ -251,7 +295,8 @@
                 </form>
                 <div id="statusVenta" class="status-message"></div>
             </section>
-             <!-- Sección: Materiales Reciclables -->
+
+            <!-- Sección: Materiales Reciclables -->
             <section id="materiales" class="content-section">
                 <h2><i class="fas fa-recycle"></i> Registro de Materiales Reciclables</h2>
                 <p class="status-message info" style="display:block;">
@@ -434,7 +479,7 @@
                     </table>
                 </div>
             </section>
-           
+
             <!-- Sección 7: Configuración -->
             <section id="configuracion" class="content-section">
                 <h2><i class="fas fa-cog"></i> Configuración de Base de Datos</h2>
