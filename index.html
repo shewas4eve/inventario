@@ -251,8 +251,169 @@
                 </form>
                 <div id="statusVenta" class="status-message"></div>
             </section>
-            
-             <!-- Sección 6: Resúmenes -->
+             <!-- Sección: Materiales Reciclables -->
+            <section id="materiales" class="content-section">
+                <h2><i class="fas fa-recycle"></i> Registro de Materiales Reciclables</h2>
+                <p class="status-message info" style="display:block;">
+                    <i class="fas fa-info-circle"></i> Registra los tipos de materiales que compras (Cobre, Aluminio, Hierro, etc.)
+                </p>
+                <form id="materialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="mat_nombre"><i class="fas fa-tag"></i> Nombre del Material:</label>
+                        <input type="text" id="mat_nombre" required placeholder="Ej: Cobre Puro">
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_tipo"><i class="fas fa-layer-group"></i> Tipo de Material:</label>
+                        <select id="mat_tipo" required>
+                            <option value="" disabled selected>Selecciona un tipo</option>
+                            <option value="Metal">🔩 Metal</option>
+                            <option value="Plástico">♻️ Plástico (PET, HDPE, etc.)</option>
+                            <option value="Vidrio">🥤 Vidrio</option>
+                            <option value="Papel/Cartón">📄 Papel/Cartón</option>
+                            <option value="Electrónico">🔌 Electrónico</option>
+                            <option value="Otro">📦 Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="mat_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="mat_descripcion"><i class="fas fa-comment"></i> Descripción (Opcional):</label>
+                        <input type="text" id="mat_descripcion" placeholder="Características del material">
+                    </div>
+                    <button type="submit" class="btn primary-btn full-width">
+                        <i class="fas fa-save"></i> Registrar Material
+                    </button>
+                </form>
+                <div id="statusMaterial" class="status-message"></div>
+                
+                <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem;">
+                    <i class="fas fa-list"></i> Materiales Registrados:
+                </h3>
+                <ul id="listaMateriales" style="list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <li style="background: var(--bg-card); padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border-color);">
+                        Cargando...
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Sección: Comprar Material Reciclable -->
+            <section id="compras-materiales" class="content-section">
+                <h2><i class="fas fa-truck-loading"></i> Compra de Material Reciclable</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra la compra de material reciclable pesado en gramos
+                </p>
+                <form id="compraMaterialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="cm_query"><i class="fas fa-search"></i> Buscar Material (ID o Nombre):</label>
+                        <input type="text" id="cm_query" placeholder="Busca el material" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_peso_gramos"><i class="fas fa-weight"></i> Peso en Gramos:</label>
+                        <input type="number" id="cm_peso_gramos" required min="1" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="cm_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="cm_proveedor"><i class="fas fa-user"></i> Proveedor (Opcional):</label>
+                        <input type="text" id="cm_proveedor" placeholder="Nombre del proveedor">
+                    </div>
+
+                    <div class="product-details hidden" id="cm_material_details"></div>
+                    <input type="hidden" id="cm_material_id">
+
+                    <!-- Vista previa del cálculo -->
+                    <div class="form-group full-width" id="cm_preview" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: none;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💰 Cálculo de Compra:</h4>
+                        <p><strong>Peso:</strong> <span id="preview_peso">0</span> gramos = <span id="preview_kg">0</span> kg</p>
+                        <p><strong>Precio por KG:</strong> $<span id="preview_precio_kg">0.00</span></p>
+                        <p style="font-size: 1.5rem; color: var(--secondary-color); margin-top: 1rem;">
+                            <strong>TOTAL A PAGAR:</strong> $<span id="preview_total">0.00</span>
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn full-width" id="cm_submit_btn" disabled>
+                        <i class="fas fa-cart-plus"></i> Registrar Compra de Material
+                    </button>
+                </form>
+                <div id="statusCompraMaterial" class="status-message"></div>
+            </section>
+
+            <!-- Sección: Vender Material Reciclable -->
+            <section id="ventas-materiales" class="content-section">
+                <h2><i class="fas fa-hand-holding-usd"></i> Venta de Material Reciclable</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Registra la venta de material reciclable pesado en gramos
+                </p>
+                <form id="ventaMaterialForm" class="form-grid">
+                    <div class="form-group">
+                        <label for="vm_query"><i class="fas fa-search"></i> Buscar Material (ID o Nombre):</label>
+                        <input type="text" id="vm_query" placeholder="Busca el material" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_peso_gramos"><i class="fas fa-weight"></i> Peso en Gramos:</label>
+                        <input type="number" id="vm_peso_gramos" required min="1" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_precio_kg"><i class="fas fa-dollar-sign"></i> Precio por KG:</label>
+                        <input type="number" id="vm_precio_kg" required min="0.01" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="vm_cliente"><i class="fas fa-user"></i> Cliente (Opcional):</label>
+                        <input type="text" id="vm_cliente" placeholder="Nombre del cliente">
+                    </div>
+
+                    <div class="product-details hidden" id="vm_material_details"></div>
+                    <input type="hidden" id="vm_material_id">
+
+                    <!-- Vista previa del cálculo -->
+                    <div class="form-group full-width" id="vm_preview" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: none;">
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💵 Cálculo de Venta:</h4>
+                        <p><strong>Peso:</strong> <span id="vm_preview_peso">0</span> gramos = <span id="vm_preview_kg">0</span> kg</p>
+                        <p><strong>Precio por KG:</strong> $<span id="vm_preview_precio_kg">0.00</span></p>
+                        <p style="font-size: 1.5rem; color: var(--secondary-color); margin-top: 1rem;">
+                            <strong>TOTAL A COBRAR:</strong> $<span id="vm_preview_total">0.00</span>
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn primary-btn full-width" id="vm_submit_btn" disabled>
+                        <i class="fas fa-hand-holding-usd"></i> Registrar Venta de Material
+                    </button>
+                </form>
+                <div id="statusVentaMaterial" class="status-message"></div>
+            </section>
+
+            <!-- Sección: Inventario de Materiales -->
+            <section id="inventario-materiales" class="content-section">
+                <h2><i class="fas fa-box"></i> Inventario de Materiales Reciclables</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Stock actual de materiales en kilogramos (Compras - Ventas)</p>
+                <button id="cargarMaterialesBtn" class="btn secondary-btn">
+                    <i class="fas fa-sync"></i> Refrescar Inventario
+                </button>
+                <div id="statusInventarioMateriales" class="status-message"></div>
+                <div style="max-height: 600px; overflow-y: auto; margin-top: 1.5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Material</th>
+                                <th>Tipo</th>
+                                <th>Precio/KG</th>
+                                <th>Stock (KG)</th>
+                                <th>Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="materialesTableBody">
+                            <tr><td colspan="6" style="text-align: center; padding: 3rem;">Presiona "Refrescar Inventario" para cargar los datos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Sección 6: Resúmenes -->
             <section id="resumenes" class="content-section">
                 <h2><i class="fas fa-list-alt"></i> Resúmenes y Reportes</h2>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
